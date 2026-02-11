@@ -9,6 +9,7 @@ def clean_ai_text(text: str) -> str:
     text = unicodedata.normalize("NFKC", text)
     text = text.replace("\r\n", "\n").replace("\r", "\n")
 
+    # Original cleaning logic (unchanged)
     cleaned_chars = []
     for char in text:
         category = unicodedata.category(char)
@@ -22,18 +23,25 @@ def clean_ai_text(text: str) -> str:
     text = "".join(cleaned_chars)
 
     # --------------------------------------------------
-    # ADDED: Notepad++ equivalent of [^\x20-\x7E]+
-    # Removes all characters outside printable ASCII
+    # ASCII filter preserving structure
+    # Keeps:
+    #   - ASCII 32–126
+    #   - newline (\n)
+    #   - tab (\t)
+    # Removes everything else
     # --------------------------------------------------
-    text = re.sub(r'[^\x20-\x7E]+', '', text)
+    ascii_filtered = []
+    for char in text:
+        if (
+            32 <= ord(char) <= 126
+            or char == "\n"
+            or char == "\t"
+        ):
+            ascii_filtered.append(char)
 
-    # Your existing formatting cleanup
-    text = text.replace("—", " ").replace("–", " ")
-    text = re.sub(r"[ \t]+", " ", text)
-    text = re.sub(r"[ \t]+\n", "\n", text)
-    text = re.sub(r"\n{3,}", "\n\n", text)
+    text = "".join(ascii_filtered)
 
-    return text.strip()
+    return text
 
 # -------------------------
 # Page Config
