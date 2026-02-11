@@ -31,8 +31,11 @@ def clean_ai_text(text: str) -> str:
 # -------------------------
 # Page Config
 # -------------------------
-st.set_page_config(page_title="AIClean", layout="wide")
-
+st.set_page_config(
+    page_title="AIClean",
+    page_icon="✨",   # You can use emoji
+    layout="wide"
+)
 
 # -------------------------
 # TRUE AI SaaS UI (Tight Hero Layout)
