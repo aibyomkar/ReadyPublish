@@ -20,13 +20,20 @@ def clean_ai_text(text: str) -> str:
         cleaned_chars.append(char)
 
     text = "".join(cleaned_chars)
+
+    # --------------------------------------------------
+    # ADDED: Notepad++ equivalent of [^\x20-\x7E]+
+    # Removes all characters outside printable ASCII
+    # --------------------------------------------------
+    text = re.sub(r'[^\x20-\x7E]+', '', text)
+
+    # Your existing formatting cleanup
     text = text.replace("—", " ").replace("–", " ")
     text = re.sub(r"[ \t]+", " ", text)
     text = re.sub(r"[ \t]+\n", "\n", text)
     text = re.sub(r"\n{3,}", "\n\n", text)
 
     return text.strip()
-
 
 # -------------------------
 # Page Config
