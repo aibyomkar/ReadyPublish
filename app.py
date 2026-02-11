@@ -1,47 +1,104 @@
-import streamlit as st
 import re
 import unicodedata
 
+
 # -------------------------
-# Cleaning Engine
+# WordPress-Optimized AI Cleaning Engine
 # -------------------------
 def clean_ai_text(text: str) -> str:
+    """
+    Production-grade AI content sanitizer for WordPress publishing.
+    - Preserves multilingual UTF-8 characters
+    - Removes invisible / malicious Unicode
+    - Normalizes smart punctuation
+    - Removes emojis
+    - Converts NBSP to regular space
+    - Preserves structure
+    """
+
+    # --------------------------------------------------
+    # 1. Normalize Unicode (critical)
+    # --------------------------------------------------
     text = unicodedata.normalize("NFKC", text)
+
+    # --------------------------------------------------
+    # 2. Standardize line endings
+    # --------------------------------------------------
     text = text.replace("\r\n", "\n").replace("\r", "\n")
 
-    # Original cleaning logic (unchanged)
+    # --------------------------------------------------
+    # 3. Remove invisible and dangerous Unicode categories
+    # --------------------------------------------------
     cleaned_chars = []
     for char in text:
         category = unicodedata.category(char)
-        if (
-            category in ("Cf", "Cs", "Co", "Cn", "Mn") or
-            (category == "Cc" and char not in ("\n", "\t"))
-        ):
+
+        # Remove format, surrogate, private use, unassigned
+        if category in ("Cf", "Cs", "Co", "Cn"):
             continue
+
+        # Remove control characters except newline and tab
+        if category == "Cc" and char not in ("\n", "\t"):
+            continue
+
         cleaned_chars.append(char)
 
     text = "".join(cleaned_chars)
 
     # --------------------------------------------------
-    # ASCII filter preserving structure
-    # Keeps:
-    #   - ASCII 32–126
-    #   - newline (\n)
-    #   - tab (\t)
-    # Removes everything else
+    # 4. Replace problematic whitespace
     # --------------------------------------------------
-    ascii_filtered = []
-    for char in text:
-        if (
-            32 <= ord(char) <= 126
-            or char == "\n"
-            or char == "\t"
-        ):
-            ascii_filtered.append(char)
+    text = text.replace("\u00A0", " ")  # Non-breaking space → normal space
+    text = text.replace("\u2007", " ")
+    text = text.replace("\u202F", " ")
 
-    text = "".join(ascii_filtered)
+    # --------------------------------------------------
+    # 5. Normalize smart punctuation to web-safe equivalents
+    # --------------------------------------------------
+    replacements = {
+        "“": '"',
+        "”": '"',
+        "‘": "'",
+        "’": "'",
+        "–": "-",
+        "—": "-",
+        "…": "...",
+    }
 
-    return text
+    for k, v in replacements.items():
+        text = text.replace(k, v)
+
+    # --------------------------------------------------
+    # 6. Remove emojis (safe for blog body text)
+    # --------------------------------------------------
+    emoji_pattern = re.compile(
+        "["
+        "\U0001F600-\U0001F64F"  # emoticons
+        "\U0001F300-\U0001F5FF"  # symbols & pictographs
+        "\U0001F680-\U0001F6FF"  # transport
+        "\U0001F700-\U0001F77F"
+        "\U0001F780-\U0001F7FF"
+        "\U0001F800-\U0001F8FF"
+        "\U0001F900-\U0001F9FF"
+        "\U0001FA00-\U0001FAFF"
+        "\U00002700-\U000027BF"
+        "\U000024C2-\U0001F251"
+        "]+",
+        flags=re.UNICODE,
+    )
+    text = emoji_pattern.sub("", text)
+
+    # --------------------------------------------------
+    # 7. Clean excessive whitespace
+    # --------------------------------------------------
+    text = re.sub(r"[ \t]+", " ", text)        # Collapse multiple spaces
+    text = re.sub(r" +\n", "\n", text)         # Remove trailing spaces
+    text = re.sub(r"\n{3,}", "\n\n", text)     # Limit excessive blank lines
+
+    # --------------------------------------------------
+    # 8. Final trim
+    # --------------------------------------------------
+    return text.strip()
 
 # -------------------------
 # Page Config
