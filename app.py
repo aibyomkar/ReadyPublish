@@ -226,7 +226,12 @@ with col1:
     input_text = st.text_area("Input Text", height=300)
 
 with col2:
-    st.text_area("Output", value=st.session_state.cleaned_text, height=300)
+    output_text = st.text_area(
+        "Output",
+        value=st.session_state.cleaned_text,
+        height=300,
+        key="output_area"
+    )
 
 col_left, col_center, col_right = st.columns([2, 1, 2])
 
