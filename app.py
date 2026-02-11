@@ -288,7 +288,7 @@ import unicodedata
 
 
 # -------------------------
-# Cleaning Engine (Lean WordPress Version)
+# Cleaning Engine
 # -------------------------
 def clean_ai_text(text: str) -> str:
     text = unicodedata.normalize("NFKC", text)
@@ -359,7 +359,7 @@ st.set_page_config(
 )
 
 # -------------------------
-# Premium UI Styling
+# Premium SaaS UI Styling
 # -------------------------
 st.markdown("""
 <style>
@@ -442,8 +442,8 @@ hr {
     border-radius: 20px !important;
     padding: 18px !important;
     font-size: 15px !important;
-    resize: both !important;      /* Enable manual resize */
-    overflow: auto !important;    /* Force scrollbar */
+    resize: both !important;
+    overflow: auto !important;
 }
 
 /* Button */
@@ -504,9 +504,8 @@ with col2:
         "Publish-Ready Output",
         value=st.session_state.cleaned_text,
         height=300,
-        disabled=True  # Read-only
+        disabled=True
     )
-
 
 col_left, col_center, col_right = st.columns([2, 1, 2])
 
@@ -519,25 +518,8 @@ if clean_clicked:
 
 
 # -------------------------
-# Copy to Clipboard Button
+# Safe Copy (Built-in)
 # -------------------------
 if st.session_state.cleaned_text:
-    st.markdown(
-        f"""
-        <div style="text-align:center; margin-top:15px;">
-        <button onclick="navigator.clipboard.writeText(`{st.session_state.cleaned_text.replace('`','\\`')}`)"
-        style="
-        width:200px;
-        height:50px;
-        background:linear-gradient(135deg,#6366f1,#a855f7);
-        color:white;
-        border:none;
-        border-radius:18px;
-        font-weight:700;
-        cursor:pointer;">
-        📋 Copy to Clipboard
-        </button>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+    st.markdown("### Copy Output")
+    st.code(st.session_state.cleaned_text, language="text")
