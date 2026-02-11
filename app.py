@@ -4,88 +4,48 @@ import unicodedata
 
 
 # ==================================================
-# HOMOGLYPH MAP (Common Cyrillic & Greek lookalikes)
+# WORDPRESS AI CONTENT CLEANER (Lean Production Version)
+# For: Software + Study Abroad Articles
 # ==================================================
 
-HOMOGLYPH_MAP = {
-    # Cyrillic → Latin
-    "а": "a", "е": "e", "о": "o", "р": "p",
-    "с": "c", "у": "y", "х": "x", "і": "i", "ӏ": "l",
+def clean_ai_text(text: str) -> str:
+    """
+    Clean AI-generated content for WordPress publishing.
 
-    # Greek → Latin
-    "Α": "A", "Β": "B", "Ε": "E", "Ζ": "Z",
-    "Η": "H", "Ι": "I", "Κ": "K", "Μ": "M",
-    "Ν": "N", "Ο": "O", "Ρ": "P", "Τ": "T",
-    "Υ": "Y", "Χ": "X",
-    "α": "a", "β": "b", "γ": "y",
-    "ι": "i", "ο": "o", "ρ": "p",
-    "τ": "t", "χ": "x",
-}
+    ✔ Normalize Unicode
+    ✔ Remove invisible characters
+    ✔ Remove unsafe control characters
+    ✔ Normalize smart punctuation
+    ✔ Remove emojis
+    ✔ Normalize whitespace
+    ✔ Preserve multilingual characters
+    ✔ Preserve structure
 
+    No overengineering.
+    """
 
-# ==================================================
-# AUTO-CORRECT HOMOGLYPHS
-# ==================================================
-
-def correct_homoglyphs(text):
-    corrected = []
-    replaced_chars = []
-
-    for char in text:
-        if char in HOMOGLYPH_MAP:
-            corrected.append(HOMOGLYPH_MAP[char])
-            replaced_chars.append(char)
-        else:
-            corrected.append(char)
-
-    return "".join(corrected), replaced_chars
-
-
-# ==================================================
-# DETECT MIXED SCRIPT WORDS
-# ==================================================
-
-def detect_mixed_scripts(text):
-    suspicious_words = []
-    words = re.findall(r"\b\w+\b", text)
-
-    for word in words:
-        has_latin = False
-        has_other = False
-
-        for char in word:
-            name = unicodedata.name(char, "")
-            if "LATIN" in name:
-                has_latin = True
-            elif "CYRILLIC" in name or "GREEK" in name:
-                has_other = True
-
-        if has_latin and has_other:
-            suspicious_words.append(word)
-
-    return suspicious_words
-
-
-# ==================================================
-# WORDPRESS-OPTIMIZED AI CLEANING ENGINE
-# ==================================================
-
-def clean_ai_text(text: str):
-
-    # 1️⃣ Normalize Unicode
+    # --------------------------------------------------
+    # 1️⃣ Normalize Unicode (critical for consistency)
+    # --------------------------------------------------
     text = unicodedata.normalize("NFKC", text)
 
+    # --------------------------------------------------
     # 2️⃣ Standardize line endings
+    # --------------------------------------------------
     text = text.replace("\r\n", "\n").replace("\r", "\n")
 
-    # 3️⃣ Remove invisible / dangerous Unicode
+    # --------------------------------------------------
+    # 3️⃣ Remove invisible / problematic Unicode
+    # --------------------------------------------------
     cleaned_chars = []
     for char in text:
         category = unicodedata.category(char)
 
+        # Remove format, surrogate, private use, unassigned
         if category in ("Cf", "Cs", "Co", "Cn"):
             continue
 
+        # Remove control characters except newline & tab
         if category == "Cc" and char not in ("\n", "\t"):
             continue
 
@@ -93,23 +53,33 @@ def clean_ai_text(text: str):
 
     text = "".join(cleaned_chars)
 
+    # --------------------------------------------------
     # 4️⃣ Normalize problematic whitespace
-    text = text.replace("\u00A0", " ")
+    # --------------------------------------------------
+    text = text.replace("\u00A0", " ")  # non-breaking space
     text = text.replace("\u2007", " ")
     text = text.replace("\u202F", " ")
 
+    # --------------------------------------------------
     # 5️⃣ Normalize smart punctuation
-    smart_replacements = {
-        "“": '"', "”": '"',
-        "‘": "'", "’": "'",
-        "–": "-", "—": "-",
+    # Important for software articles & code clarity
+    # --------------------------------------------------
+    replacements = {
+        "“": '"',
+        "”": '"',
+        "‘": "'",
+        "’": "'",
+        "–": "-",
+        "—": "-",
         "…": "...",
     }
 
-    for k, v in smart_replacements.items():
+    for k, v in replacements.items():
         text = text.replace(k, v)
 
-    # 6️⃣ Remove emojis
+    # --------------------------------------------------
+    # 6️⃣ Remove emojis (professional publishing)
+    # --------------------------------------------------
     emoji_pattern = re.compile(
         "["
         "\U0001F600-\U0001F64F"
@@ -127,24 +97,18 @@ def clean_ai_text(text: str):
 
     text = emoji_pattern.sub("", text)
 
-    # 7️⃣ Auto-correct homoglyphs
-    text, replaced_chars = correct_homoglyphs(text)
-
-    # 8️⃣ Detect mixed-script risks
-    suspicious_words = detect_mixed_scripts(text)
-
-    # 9️⃣ Clean excessive whitespace
+    # --------------------------------------------------
+    # 7️⃣ Clean excessive whitespace
+    # --------------------------------------------------
     text = re.sub(r"[ \t]+", " ", text)
     text = re.sub(r" +\n", "\n", text)
     text = re.sub(r"\n{3,}", "\n\n", text)
 
-    text = text.strip()
-
-    return text, suspicious_words, replaced_chars
+    return text.strip()
 
 
 # ==================================================
-# STREAMLIT APP CONFIG
+# STREAMLIT APP
 # ==================================================
 
 st.set_page_config(
@@ -156,30 +120,26 @@ st.set_page_config(
 st.markdown(
     """
     <h1 style="text-align:center;">AIClean</h1>
-    <p style="text-align:center;">WordPress AI Content Sanitizer (Security Hardened)</p>
+    <p style="text-align:center;">
+    AI Content Cleaner for Software & Study Abroad WordPress Publishing
+    </p>
     <hr>
     """,
     unsafe_allow_html=True
 )
 
 
-# ==================================================
-# SESSION STATE
-# ==================================================
+# --------------------------------------------------
+# Session State
+# --------------------------------------------------
 
 if "cleaned_text" not in st.session_state:
     st.session_state.cleaned_text = ""
 
-if "suspicious_words" not in st.session_state:
-    st.session_state.suspicious_words = []
 
-if "replaced_chars" not in st.session_state:
-    st.session_state.replaced_chars = []
-
-
-# ==================================================
-# LAYOUT
-# ==================================================
+# --------------------------------------------------
+# Layout
+# --------------------------------------------------
 
 col1, col2 = st.columns(2)
 
@@ -196,25 +156,10 @@ with col_center:
     clean_clicked = st.button("Clean Text", use_container_width=True)
 
 
-# ==================================================
-# CLEANING ACTION
-# ==================================================
+# --------------------------------------------------
+# Cleaning Action
+# --------------------------------------------------
 
 if clean_clicked:
-    cleaned, suspicious, replaced = clean_ai_text(input_text)
-    st.session_state.cleaned_text = cleaned
-    st.session_state.suspicious_words = suspicious
-    st.session_state.replaced_chars = replaced
+    st.session_state.cleaned_text = clean_ai_text(input_text)
     st.rerun()
-
-
-# ==================================================
-# SECURITY REPORTING
-# ==================================================
-
-if st.session_state.replaced_chars:
-    st.info(f"Auto-corrected homoglyph characters: {set(st.session_state.replaced_chars)}")
-
-if st.session_state.suspicious_words:
-    st.warning("Mixed-script words detected:")
-    st.write(st.session_state.suspicious_words)
