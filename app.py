@@ -207,7 +207,7 @@ import unicodedata
 
 
 # ==================================================
-# CLEANING ENGINE (Lean Production Version)
+# CLEANING ENGINE
 # ==================================================
 
 def clean_ai_text(text: str) -> str:
@@ -270,38 +270,41 @@ def clean_ai_text(text: str) -> str:
 # PAGE CONFIG
 # ==================================================
 
-st.set_page_config(
-    page_title="ReadyPublish",
-    page_icon="🚀",
-    layout="wide"
-)
+st.set_page_config(page_title="ReadyPublish", page_icon="🚀", layout="wide")
 
 
 # ==================================================
-# PERFECTLY FITTING UI STYLING
+# TRUE FULLSCREEN SAAS LAYOUT
 # ==================================================
 
 st.markdown("""
 <style>
 
-/* Remove default spacing */
+/* Remove all default spacing */
 .block-container {
-    padding-top: 1rem !important;
-    padding-bottom: 0rem !important;
+    padding: 0 !important;
+    margin: 0 !important;
     max-width: 1200px;
 }
 
-header, footer {visibility: hidden;}
-
-/* Full height layout */
+/* Force full viewport height */
 html, body, [data-testid="stAppViewContainer"] {
-    height: 100%;
+    height: 100vh;
+    overflow: hidden;
 }
 
-/* Background */
+/* Main app background */
 .stApp {
     background: radial-gradient(circle at 20% 20%, #1e293b 0%, #0f172a 50%, #020617 100%);
     color: #e2e8f0;
+}
+
+/* Center entire layout */
+.main-wrapper {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 /* Hero */
@@ -312,14 +315,14 @@ html, body, [data-testid="stAppViewContainer"] {
     background: linear-gradient(90deg, #6366f1, #a855f7);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin-bottom: 0.2rem;
+    margin-bottom: 8px;
 }
 
 .hero-subtitle {
     text-align: center;
     font-size: 18px;
     color: #94a3b8;
-    margin-bottom: 2rem;
+    margin-bottom: 40px;
 }
 
 /* Text Areas */
@@ -331,14 +334,14 @@ html, body, [data-testid="stAppViewContainer"] {
     color: #e2e8f0 !important;
     padding: 16px !important;
     font-size: 15px !important;
-    height: 380px !important;
+    height: 320px !important;
 }
 
 /* Button */
 .stButton > button {
     width: 220px;
     height: 55px;
-    margin: 0 auto;
+    margin: 30px auto 0 auto;
     display: block;
     background: linear-gradient(135deg, #6366f1, #a855f7);
     color: white;
@@ -356,11 +359,13 @@ html, body, [data-testid="stAppViewContainer"] {
 }
 
 </style>
+
+<div class="main-wrapper">
 """, unsafe_allow_html=True)
 
 
 # ==================================================
-# HERO SECTION
+# HERO
 # ==================================================
 
 st.markdown("""
@@ -372,7 +377,7 @@ Make Every AI Draft Ready to Go Live.
 
 
 # ==================================================
-# SESSION STATE
+# SESSION
 # ==================================================
 
 if "cleaned_text" not in st.session_state:
@@ -380,10 +385,10 @@ if "cleaned_text" not in st.session_state:
 
 
 # ==================================================
-# MAIN GRID (Perfect Alignment)
+# GRID
 # ==================================================
 
-col1, col2 = st.columns(2, gap="large")
+col1, col2 = st.columns(2)
 
 with col1:
     input_text = st.text_area("Paste Your AI Draft")
@@ -392,11 +397,11 @@ with col2:
     st.text_area("Publish-Ready Output", value=st.session_state.cleaned_text)
 
 
-# Center Button
-st.markdown("<div style='margin-top:20px;'></div>", unsafe_allow_html=True)
-
 clean_clicked = st.button("🚀 Clean & Make Ready")
 
 if clean_clicked:
     st.session_state.cleaned_text = clean_ai_text(input_text)
     st.rerun()
+
+
+st.markdown("</div>", unsafe_allow_html=True)
