@@ -35,13 +35,12 @@ st.set_page_config(page_title="AIClean", layout="wide")
 
 
 # -------------------------
-# AI SaaS Premium UI
+# AI SaaS Premium UI Styling
 # -------------------------
 st.markdown(
     """
     <style>
 
-    /* Remove default spacing */
     .block-container {
         padding-top: 0.8rem !important;
         padding-bottom: 0rem !important;
@@ -57,7 +56,6 @@ st.markdown(
         overflow-x: hidden;
     }
 
-    /* Background */
     .stApp {
         background: radial-gradient(circle at 15% 20%, #1e293b 0%, #0f172a 45%, #020617 100%);
         color: #e2e8f0;
@@ -88,7 +86,6 @@ st.markdown(
         z-index: 0;
     }
 
-    /* Title */
     h1 {
         font-size: 46px;
         font-weight: 800;
@@ -100,7 +97,6 @@ st.markdown(
         margin-top: 0rem;
     }
 
-    /* Subtitle */
     p {
         text-align: center;
         font-size: 17px !important;
@@ -108,7 +104,6 @@ st.markdown(
         margin-bottom: 1.2rem !important;
     }
 
-    /* Divider */
     hr {
         border: none;
         height: 1px;
@@ -117,7 +112,6 @@ st.markdown(
         margin-bottom: 22px;
     }
 
-    /* Text Areas */
     .stTextArea textarea {
         background: rgba(15, 23, 42, 0.75) !important;
         backdrop-filter: blur(16px);
@@ -141,7 +135,7 @@ st.markdown(
         letter-spacing: 0.4px;
     }
 
-    /* Premium Button */
+    /* Perfect SaaS Button */
     .stButton > button {
         width: 200px;
         height: 56px;
@@ -224,10 +218,9 @@ with col1:
 with col2:
     st.text_area(
         "Output",
-        value=st.session_state.cleaned_text,
+        key="cleaned_text",  # Bind directly to session state
         height=300,
-        key="output_area",
-        disabled=True  # Professional SaaS behavior
+        disabled=True        # Scrollable but not editable
     )
 
 col_left, col_center, col_right = st.columns([2, 1, 2])
@@ -237,4 +230,3 @@ with col_center:
 
 if clean_clicked:
     st.session_state.cleaned_text = clean_ai_text(input_text)
-    st.rerun()
