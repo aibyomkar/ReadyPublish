@@ -35,13 +35,13 @@ st.set_page_config(page_title="AIClean", layout="wide")
 
 
 # -------------------------
-# TRUE AI SaaS UI (Tight Hero Layout)
+# AI SaaS Premium UI
 # -------------------------
 st.markdown(
     """
     <style>
 
-    /* ===== Remove ALL Default Spacing ===== */
+    /* Remove default spacing */
     .block-container {
         padding-top: 0.8rem !important;
         padding-bottom: 0rem !important;
@@ -55,16 +55,15 @@ st.markdown(
 
     html, body {
         overflow-x: hidden;
-        height: 100vh;
     }
 
-    /* ===== Background ===== */
+    /* Background */
     .stApp {
         background: radial-gradient(circle at 15% 20%, #1e293b 0%, #0f172a 45%, #020617 100%);
         color: #e2e8f0;
     }
 
-    /* Soft glow accents */
+    /* Glow accents */
     .stApp:before {
         content: "";
         position: fixed;
@@ -89,7 +88,7 @@ st.markdown(
         z-index: 0;
     }
 
-    /* ===== Hero Title ===== */
+    /* Title */
     h1 {
         font-size: 46px;
         font-weight: 800;
@@ -118,7 +117,7 @@ st.markdown(
         margin-bottom: 22px;
     }
 
-    /* ===== Text Areas (Glass SaaS Card) ===== */
+    /* Text Areas */
     .stTextArea textarea {
         background: rgba(15, 23, 42, 0.75) !important;
         backdrop-filter: blur(16px);
@@ -127,6 +126,7 @@ st.markdown(
         border-radius: 20px !important;
         padding: 18px !important;
         font-size: 15px !important;
+        resize: vertical !important;
         transition: all 0.3s ease;
     }
 
@@ -141,34 +141,32 @@ st.markdown(
         letter-spacing: 0.4px;
     }
 
-    /* ===== Premium SaaS Button ===== */
-
+    /* Premium Button */
     .stButton > button {
-    width: 200px;
-    height: 56px;
+        width: 200px;
+        height: 56px;
 
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
 
-    margin: 0 auto;
-    padding: 0 !important;
+        margin: 0 auto;
+        padding: 0 !important;
 
-    background: linear-gradient(135deg, #6366f1, #a855f7);
-    color: white;
-    border-radius: 18px;
-    border: none;
+        background: linear-gradient(135deg, #6366f1, #a855f7);
+        color: white;
+        border-radius: 18px;
+        border: none;
 
-    font-weight: 700;
-    font-size: 15px;
-    letter-spacing: 0.4px;
-    line-height: 1 !important;          /* 🔥 Critical fix */
+        font-weight: 700;
+        font-size: 15px;
+        letter-spacing: 0.4px;
+        line-height: 1 !important;
 
-    box-shadow: 0 12px 35px rgba(99,102,241,0.45);
-    transition: all 0.3s ease;
+        box-shadow: 0 12px 35px rgba(99,102,241,0.45);
+        transition: all 0.3s ease;
     }
 
-    /* Force inner text container to center */
     .stButton > button > div {
         display: flex !important;
         align-items: center !important;
@@ -176,7 +174,6 @@ st.markdown(
         width: 100%;
     }
 
-    /* Remove any default text spacing */
     .stButton > button p {
         margin: 0 !important;
     }
@@ -189,7 +186,6 @@ st.markdown(
     .stButton > button:active {
         transform: scale(0.98);
     }
-
 
     </style>
     """,
@@ -218,7 +214,7 @@ if "cleaned_text" not in st.session_state:
 
 
 # -------------------------
-# Layout (UNCHANGED)
+# Layout
 # -------------------------
 col1, col2 = st.columns(2)
 
@@ -226,17 +222,18 @@ with col1:
     input_text = st.text_area("Input Text", height=300)
 
 with col2:
-    output_text = st.text_area(
+    st.text_area(
         "Output",
         value=st.session_state.cleaned_text,
         height=300,
-        key="output_area"
+        key="output_area",
+        disabled=True  # Professional SaaS behavior
     )
 
 col_left, col_center, col_right = st.columns([2, 1, 2])
 
 with col_center:
-    clean_clicked = st.button("Clean Text", use_container_width=True)
+    clean_clicked = st.button("Clean Text")
 
 if clean_clicked:
     st.session_state.cleaned_text = clean_ai_text(input_text)
