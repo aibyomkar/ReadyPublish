@@ -479,46 +479,45 @@ st.markdown(
     }
 
     /* =========================
-       PREMIUM CTA BUTTON
-       ========================= */
+   PREMIUM CTA BUTTON
+   ========================= */
 
-    .stButton {
-        display: flex;
-        justify-content: center;
-        margin-top: 10px;
-    }
+.stButton {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
 
-    .stButton > button {
-        width: 240px;
-        height: 60px;
-        border-radius: 999px;
-        border: none;
-        font-weight: 700;
-        font-size: 16px;
-        letter-spacing: 0.6px;
-        background: linear-gradient(135deg, #6366f1, #a855f7);
-        color: white;
-        box-shadow: 
-            0 10px 25px rgba(99,102,241,0.35),
-            0 0 0 rgba(168,85,247,0.0);
-        transition: all 0.25s ease;
-    }
+.stButton > button {
+    width: 240px;
+    height: 60px;
+    border-radius: 999px;
+    border: none;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 0.6px;
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    color: #ffffff !important;
+    box-shadow: 
+        0 10px 25px rgba(99,102,241,0.35);
+    transition: all 0.25s ease;
+}
 
-    .stButton > button:hover {
-        transform: translateY(-4px);
-        box-shadow: 
-            0 18px 40px rgba(168,85,247,0.55),
-            0 0 25px rgba(168,85,247,0.6);
-    }
+/* FORCE TEXT COLOR */
+.stButton > button span {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+}
 
-    .stButton > button:active {
-        transform: translateY(0px) scale(0.97);
-        box-shadow: 0 8px 20px rgba(99,102,241,0.4);
-    }
+.stButton > button:hover {
+    transform: translateY(-4px);
+    box-shadow: 
+        0 18px 40px rgba(168,85,247,0.55);
+}
 
-    .stButton > button p {
-        margin: 0 !important;
-    }
+.stButton > button:active {
+    transform: scale(0.97);
+}
 
     </style>
     """,
