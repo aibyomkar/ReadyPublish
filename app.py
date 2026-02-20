@@ -251,7 +251,7 @@ with col2:
 col_left, col_center, col_right = st.columns([2, 1, 2])
 
 with col_center:
-    clean_clicked = st.button("⚡ Clean", use_container_width=True)
+    clean_clicked = st.button("⚡ Publish-Ready", use_container_width=True)
 
 if clean_clicked:
     st.session_state.cleaned_text = clean_ai_text(input_text)
