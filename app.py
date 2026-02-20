@@ -265,19 +265,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 import streamlit as st
 import re
 import unicodedata
@@ -356,33 +343,23 @@ st.set_page_config(
 )
 
 # -------------------------
-# TRUE AI SaaS UI (Same Design)
+# UI Styling
 # -------------------------
 st.markdown(
     """
     <style>
-
     .block-container {
         padding-top: 0.8rem !important;
         padding-bottom: 0rem !important;
         margin-top: 0rem !important;
         max-width: 1200px;
     }
-
-    header, footer {
-        visibility: hidden;
-    }
-
-    html, body {
-        overflow-x: hidden;
-        height: 100vh;
-    }
-
+    header, footer { visibility: hidden; }
+    html, body { overflow-x: hidden; height: 100vh; }
     .stApp {
         background: radial-gradient(circle at 15% 20%, #1e293b 0%, #0f172a 45%, #020617 100%);
         color: #e2e8f0;
     }
-
     h1 {
         font-size: 46px;
         font-weight: 800;
@@ -393,14 +370,12 @@ st.markdown(
         margin-bottom: 0.3rem;
         margin-top: 0rem;
     }
-
     p {
         text-align: center;
         font-size: 17px !important;
         color: #94a3b8 !important;
         margin-bottom: 1.2rem !important;
     }
-
     hr {
         border: none;
         height: 1px;
@@ -408,7 +383,6 @@ st.markdown(
         margin-top: 8px;
         margin-bottom: 22px;
     }
-
     </style>
     """,
     unsafe_allow_html=True
@@ -441,7 +415,6 @@ with col1:
     st.markdown("### Paste Your AI Draft")
     input_text = st_quill(
         placeholder="Paste your AI draft here...",
-        html=True,
         key="editor"
     )
 
